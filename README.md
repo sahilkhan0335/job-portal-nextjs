@@ -9,7 +9,8 @@ This project allows users to **register**, **log in**, and **manage job listings
 
 - 🔐 **User Authentication**
   - Registration and Login with password hashing (`argon2`)
-  - Secure session handling
+  - **Get Current User Info using Cookie & Session**
+  - Secure session handling for authenticated routes
 - 💼 **Job Management**
   - Create, update, and delete job postings
   - View available jobs and apply
