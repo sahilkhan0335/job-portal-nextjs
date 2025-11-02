@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Card,
@@ -23,7 +23,6 @@ const LoginForm: React.FC = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(loginUserSchema),
@@ -35,11 +34,18 @@ const LoginForm: React.FC = () => {
     try {
       const result = await loginUserAction(data);
 
-      if (result.status === "SUCCESS") toast.success(result.message);
-      else toast.error(result.message);
-    } catch (error) {}
+      if (result.status === "SUCCESS") {
+        toast.success(result.message);
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error: any) {
+      console.error("Login failed:", error);
+      toast.error(
+        error?.message || "An unexpected error occurred while logging in."
+      );
+    }
   };
-
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
@@ -48,7 +54,7 @@ const LoginForm: React.FC = () => {
             <UserCheck className="w-8 h-8 text-primary-foreground" />
           </div>
           <CardTitle className="text-2xl">Join Our Job Portal</CardTitle>
-          <CardDescription>Create your account to get started</CardDescription>
+          <CardDescription>Login to your account get started</CardDescription>
         </CardHeader>
 
         <CardContent>
@@ -115,17 +121,17 @@ const LoginForm: React.FC = () => {
 
             {/* Submit Button */}
             <Button type="submit" className="w-full">
-              Create Account
+              Log In
             </Button>
 
             <div className="text-center">
               <p className="text-sm text-muted-foreground">
-                Already have an account?
+                Create New account?
                 <Link
                   href="/register"
                   className="text-primary hover:text-primary/80 font-medium underline-offset-4 hover:underline"
                 >
-                  Sign in here
+                  Click
                 </Link>
               </p>
             </div>
