@@ -1,7 +1,7 @@
 # 🧑‍💼 Job Portal — Next.js 15 + Drizzle ORM + MySQL
 
 A modern **Job Portal** built with **Next.js 15**, **React 19**, **Tailwind CSS 4**, and **Drizzle ORM**, created by **Sahil Khan**.  
-This project allows users to **register**, **log in**, and **manage job listings** in a clean, responsive interface.
+This project allows users to **register**, **log in**, **fetch current user info**, and **manage job listings** in a clean, responsive interface.
 
 ---
 
@@ -10,7 +10,8 @@ This project allows users to **register**, **log in**, and **manage job listings
 - 🔐 **User Authentication**
   - Registration and Login with password hashing (`argon2`)
   - **Get Current User Info using Cookie & Session**
-  - Secure session handling for authenticated routes
+  - **Extended Session Expiry** — automatically refreshes user sessions for longer authenticated access
+  - Secure session handling for protected routes
 - 💼 **Job Management**
   - Create, update, and delete job postings
   - View available jobs and apply
@@ -35,7 +36,7 @@ This project allows users to **register**, **log in**, and **manage job listings
 | Frontend | Next.js 15, React 19, Tailwind CSS 4 |
 | Backend | Next.js API Routes |
 | Database | MySQL + Drizzle ORM |
-| Authentication | Argon2 password hashing |
+| Authentication | Argon2 password hashing, Cookie & Session Management |
 | Validation | Zod |
 | Forms | React Hook Form |
 | UI Components | Radix UI, Lucide React |
