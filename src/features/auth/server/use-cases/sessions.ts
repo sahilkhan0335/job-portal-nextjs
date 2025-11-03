@@ -3,9 +3,7 @@ import crypto from "crypto";
 import { getIPAddress } from "./location";
 import { sessions, users } from "@/drizzle/schema";
 import { db } from "@/config/db";
-import { SESSION_LIFETIME } from "@/config/constant";
-import { id } from "zod/locales";
-import { email } from "zod";
+import { SESSION_LIFETIME, SESSION_REFRESH_TIME } from "@/config/constant";
 import { eq } from "drizzle-orm";
 
 type CreateSessionData = {
@@ -93,5 +91,28 @@ export const validateSessionAndGetUser = async (session: string) => {
     .where(eq(sessions.id, hashedToken))
     .innerJoin(users, eq(users.id, sessions.userId));
 
-    return user;
+  if (!user) return null;
+
+  // Condition 2
+  if (Date.now() >= user.session.expiresAt.getTime()) {
+    await invalidateSession(user.session.id);
+    return null;
+  }
+
+  if (
+    Date.now() >=
+    user.session.expiresAt.getTime() - SESSION_REFRESH_TIME * 1000
+  ) {
+    await db
+      .update(sessions)
+      .set({
+        expiresAt: new Date(Date.now() + SESSION_LIFETIME * 1000),
+      })
+      .where(eq(sessions.id, user.session.id));
+  }
+  return user;
+};
+
+const invalidateSession = async (id: string) => {
+  await db.delete(sessions).where(eq(sessions.id, id));
 };
