@@ -12,6 +12,7 @@ This application enables users to **register**, **log in**, **view and manage jo
 - **Get Current User Info** using Cookie & Session
 - **Extended Session Expiry** — keeps users logged in longer via session refresh
 - **Role-Based Protected Routes**
+  - Role-Based Access (for employer & Applicant)
   - Employer Dashboard (for job posting & management)
   - Applicant Dashboard (for job browsing & applying)
 - **Session Security** for authenticated route access
