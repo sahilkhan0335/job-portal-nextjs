@@ -1,7 +1,7 @@
 #  Job Portal — Next.js 15 + Drizzle ORM + MySQL
 
-A modern **Job Portal** built using **Next.js 15**, **React 19**, **Tailwind CSS 4**, and **Drizzle ORM**, crafted by **Sahil Khan**.  
-This application enables users to **register**, **log in**, **view and manage job listings**, and **access role-based dashboards** for Employers and Applicants — all within a clean and responsive UI.
+A modern **Job Portal** built using **Next.js 15**, **React 19**, **Tailwind CSS 4** and **Drizzle ORM** crafted by **Sahil Khan**.  
+This application enables users to **register**, **log in**, **view and manage job listings** and **access role-based dashboards** for Employers and Applicants — all within a clean and responsive UI.
 
 ---
 
