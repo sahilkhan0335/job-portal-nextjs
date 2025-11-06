@@ -10,7 +10,13 @@ import {
   RegisterUserData,
   registerUserSchema,
 } from "../auth.schema";
-import { createSessionAndSetCookies } from "./use-cases/sessions";
+import {
+  createSessionAndSetCookies,
+  invalidateSession,
+} from "./use-cases/sessions";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import crypto from "crypto";
 
 // 👉 Server Actions in Next.js are special functions that run only on the server, not in the user’s browser.
 
@@ -104,4 +110,23 @@ export const loginUserAction = async (data: LoginUserData) => {
       message: "Unknown Error Occurred! Please Try Again Later",
     };
   }
+};
+
+// Logout User
+export const logoutUserAction = async () => {
+  const cookieStore = await cookies();
+  const session = cookieStore.get("session")?.value;
+
+  if (!session) return redirect("/login");
+
+  const hashedToken = crypto
+    .createHash("sha-256")
+    .update(session)
+    .digest("hex");
+
+  await invalidateSession(hashedToken);
+
+  cookieStore.delete("session");
+
+  return redirect("/login");
 };
