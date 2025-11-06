@@ -16,6 +16,9 @@ This application enables users to **register**, **log in**, **view and manage jo
   - Employer Dashboard (for job posting & management)
   - Applicant Dashboard (for job browsing & applying)
 - **Session Security** for authenticated route access
+  - Users can securely log out from their account.
+  - Logout instantly deletes session data from the database using **Drizzle ORM + MySQL**.
+  - Prevents session reuse and ensures user security across all routes.
 
 ###   Job Management
 - Employers can **create, update, and delete job listings**
