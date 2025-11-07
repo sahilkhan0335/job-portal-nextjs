@@ -18,7 +18,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import crypto from "crypto";
 
-// 👉 Server Actions in Next.js are special functions that run only on the server, not in the user’s browser.
+//  Server Actions in Next.js are special functions that run only on the server, not in the user’s browser.
 
 // They let you perform things like database queries, API calls, form submissions, or data mutations directly from your React components — without creating a separate API route.
 
@@ -54,18 +54,20 @@ export const registerUserAction = async (data: RegisterUserData) => {
 
     const hashPassword = await argon2.hash(password);
 
-    const [result] = await db
-      .insert(users)
-      .values({ name, userName, email, password: hashPassword, role });
+    await db.transaction(async (tx) => {
+      const [result] = await tx
+        .insert(users)
+        .values({ name, userName, email, password: hashPassword, role });
 
-    console.log(result);
-    if (role === "applicant") {
-      await db.insert(applicants).values({ id: result.insertId });
-    } else {
-      await db.insert(employers).values({ id: result.insertId });
-    }
+      console.log(result);
+      if (role === "applicant") {
+        await tx.insert(applicants).values({ id: result.insertId });
+      } else {
+        await tx.insert(employers).values({ id: result.insertId });
+      }
 
-    await createSessionAndSetCookies(result.insertId);
+      await createSessionAndSetCookies(result.insertId, tx);
+    });
 
     return {
       status: "SUCCESS",
