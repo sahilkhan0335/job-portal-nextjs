@@ -12,4 +12,5 @@ export default async function DashboardLayout({
   if (user.role !== "employer") return redirect("dashboard");
 
   return <>{ children }</>;
+  
 }
