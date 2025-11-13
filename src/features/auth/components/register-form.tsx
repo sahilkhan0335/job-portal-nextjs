@@ -215,7 +215,7 @@ const RegistrationForm = () => {
                   href="/login"
                   className="text-primary hover:text-primary/80 font-medium underline-offset-4 hover:underline"
                 >
-                  Sign in here
+                   Login in here
                 </Link>
               </p>
             </div>

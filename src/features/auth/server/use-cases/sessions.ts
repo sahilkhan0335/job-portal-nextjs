@@ -38,16 +38,18 @@ const createUserSession = async ({
     expiresAt: new Date(Date.now() + SESSION_LIFETIME * 1000),
     ip,
     userAgent,
-    
   });
 
   return session;
 };
 
-// Give me the type of the first parameter of the callback inside db.transaction - that's the tx object
+// Give me the type of the first parameter of the callback inside db.transaction — that's the tx object
 type DbClient = typeof db | Parameters<Parameters<typeof db.transaction>[0]>[0];
 
-export const createSessionAndSetCookies = async (userId: number , tx: DbClient = db ) => {
+export const createSessionAndSetCookies = async (
+  userId: number,
+  tx: DbClient = db
+) => {
   const token = generateSessionToken();
   const ip = await getIPAddress();
   const headersList = await headers();
@@ -57,7 +59,7 @@ export const createSessionAndSetCookies = async (userId: number , tx: DbClient =
     userId: userId,
     userAgent: headersList.get("user-agent") || "",
     ip: ip,
-    
+    tx,
   });
 
   const cookieStore = await cookies();
@@ -89,10 +91,10 @@ export const validateSessionAndGetUser = async (session: string) => {
       role: users.role,
       phoneNumber: users.phoneNumber,
       email: users.email,
+      // emailVerifiedAt: users.emailVerifiedAt,
+      // avatarUrl: users.avatarUrl,
       createdAt: users.createdAt,
       updatedAt: users.updatedAt,
-      // emailVerifiedAt: users.emailVerifiedAt,
-      // avatarUrl : users.avatarUrl,
     })
     .from(sessions)
     .where(eq(sessions.id, hashedToken))
@@ -100,11 +102,12 @@ export const validateSessionAndGetUser = async (session: string) => {
 
   if (!user) return null;
 
-  // Condition 2
+  // 2:
   if (Date.now() >= user.session.expiresAt.getTime()) {
     await invalidateSession(user.session.id);
     return null;
   }
+  // console.log(expiresAt.getTime()); // 1764562512000
 
   if (
     Date.now() >=
